@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Adatbazis.Models
 {
-    public class Javitas
+    public class JavitasTipus
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,6 +16,6 @@ namespace Adatbazis.Models
 
         [Required]
         [StringLength(50)]
-        public string JavitasTipus { get; set; }
+        public string TipusNev { get; set; } = string.Empty;
     }
 }

@@ -19,7 +19,7 @@ namespace Adatbazis
 
         public DbSet<Dolgozo> Dolgozok { get; set; }
 
-        public DbSet<Javitas> Javitasok { get; set; }
+        public DbSet<JavitasTipus> JavitasTipusok { get; set; }
 
         public DbSet<Bejelentes> Bejelentesek { get; set; }
     }

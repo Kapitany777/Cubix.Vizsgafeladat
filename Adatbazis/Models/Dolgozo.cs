@@ -16,10 +16,10 @@ namespace Adatbazis.Models
 
         [Required]
         [StringLength(50)]
-        public string VezetekNev { get; set; }
+        public string VezetekNev { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
-        public string KeresztNev { get; set; }
+        public string KeresztNev { get; set; } = string.Empty;
     }
 }
