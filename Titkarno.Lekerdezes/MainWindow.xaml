@@ -5,8 +5,125 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Titkarno.Lekerdezes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Mindig Fényes Kft. - Statisztika UI modul" Height="450" Width="800"
+        WindowState="Maximized">
 
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="10 0" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="20 0" />
+            <Setter Property="Padding" Value="10 2" />
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
+
+        <Style x:Key="ColumnElementStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Mindig Fényes Kft. - Statisztika UI modul"
+                   Margin="15" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center"
+                   Grid.Row="0" />
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Egy munkatárs által elvégzett munkák listája" FontSize="14">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Egy munkatárs által elvégzett munkák listája" />
+
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="A dolgozó kódja: " Grid.Column="0" />
+                        <TextBox Name="TextBoxDolgozoId" Grid.Column="1" />
+                        <TextBlock Name="TextBlockDolgozoNev" Grid.Column="2" />
+                        <Button Name="ButtonLekerdezes1" Content="A lekérdezés futtatása"
+                                Click="ButtonLekerdezes1_Click"
+                                Grid.Column="3" />
+                        <Button Name="ButtonExport1" Content="Az eredmény exportálása"
+                                Click="ButtonExport1_Click"
+                                Grid.Column="4" />
+                    </Grid>
+
+                    <DataGrid Name="DataGridEredmeny1" ItemsSource="{Binding}" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="Irányítószám" Binding="{Binding Iranyitoszam}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="Város" Binding="{Binding Varos}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="Cím" Binding="{Binding Cim}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A hiba leírása" Binding="{Binding HibaLeiras}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A bejelentés dátuma" Binding="{Binding BejelentesDatuma, StringFormat=\{0:yyyy.MM.dd.\}}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A javítás dátuma" Binding="{Binding JavitasDatuma, StringFormat=\{0:yyyy.MM.dd.\}}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A javítás típusa" Binding="{Binding JavitasTipus.TipusNev}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Egy adott hónapban elvégzett összes munka" FontSize="14">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Egy adott hónapban elvégzett összes munka" />
+
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Év / Hónap: " Grid.Column="0" />
+                        <TextBox Name="TextBoxEv" Grid.Column="1" />
+                        <TextBox Name="TextBoxHonap" Grid.Column="2" />
+                        <CheckBox Name="CheckBoxFeladatTipus" Content="A feladatok típusa szerint csoportosítva" Grid.Column="3" />
+                        <Button Name="ButtonLekerdezes2" Content="A lekérdezés futtatása"
+                                Click="ButtonLekerdezes2_Click"
+                                Grid.Column="4" />
+                        <Button Name="ButtonExport2" Content="Az eredmény exportálása"
+                                Click="ButtonExport2_Click"
+                                Grid.Column="5" />
+                    </Grid>
+
+                    <DataGrid Name="DataGridEredmeny2" ItemsSource="{Binding}" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="Irányítószám" Binding="{Binding Iranyitoszam}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="Város" Binding="{Binding Varos}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="Cím" Binding="{Binding Cim}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A hiba leírása" Binding="{Binding HibaLeiras}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A bejelentés dátuma" Binding="{Binding BejelentesDatuma, StringFormat=\{0:yyyy.MM.dd.\}}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A javítás dátuma" Binding="{Binding JavitasDatuma, StringFormat=\{0:yyyy.MM.dd.\}}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                            <DataGridTextColumn Header="A javítás típusa" Binding="{Binding JavitasTipus.TipusNev}" ElementStyle="{StaticResource ColumnElementStyle}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
