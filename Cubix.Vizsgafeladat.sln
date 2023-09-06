@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Titkarno.Lekerdezes", "Titk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adatbazis.KezdetiAdatok", "Adatbazis.KezdetiAdatok\Adatbazis.KezdetiAdatok.csproj", "{DBFAEBAB-4005-4453-9F7C-AFC64F49DB0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lekerdezesek", "Lekerdezesek\Lekerdezesek.csproj", "{467987D0-F787-47C7-B519-92545C0923AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lekerdezesek", "Lekerdezesek\Lekerdezesek.csproj", "{467987D0-F787-47C7-B519-92545C0923AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lekerdezesek.Teszt", "Lekerdezesek.Teszt\Lekerdezesek.Teszt.csproj", "{C11F6E1D-C04A-46FD-9260-5E2CAD1850F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lekerdezesek.Teszt", "Lekerdezesek.Teszt\Lekerdezesek.Teszt.csproj", "{C11F6E1D-C04A-46FD-9260-5E2CAD1850F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bejelentes.Web", "Bejelentes.Web\Bejelentes.Web.csproj", "{EE5613DF-A37E-4386-ABCD-D03DAE8FFBDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{C11F6E1D-C04A-46FD-9260-5E2CAD1850F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C11F6E1D-C04A-46FD-9260-5E2CAD1850F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C11F6E1D-C04A-46FD-9260-5E2CAD1850F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE5613DF-A37E-4386-ABCD-D03DAE8FFBDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE5613DF-A37E-4386-ABCD-D03DAE8FFBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE5613DF-A37E-4386-ABCD-D03DAE8FFBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE5613DF-A37E-4386-ABCD-D03DAE8FFBDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
