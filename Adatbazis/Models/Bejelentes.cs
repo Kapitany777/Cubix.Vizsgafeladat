@@ -27,16 +27,20 @@ namespace Adatbazis.Models
         public string Cim { get; set; } = string.Empty;
 
         [Required]
+        [StringLength(80)]
+        public string HibaLeiras { get; set; } = string.Empty;
+
+        [Required]
         public DateTime BejelentesDatuma { get; set; }
 
         public DateTime? JavitasDatuma { get; set; }
 
         public int? DolgozoId { get; set; }
 
-        public Dolgozo? Dolgozo { get; set; }
+        public virtual Dolgozo? Dolgozo { get; set; }
 
         public int? JavitasTipusId { get; set; }
 
-        public JavitasTipus? JavitasTipus { get; set; }
+        public virtual JavitasTipus? JavitasTipus { get; set; }
     }
 }

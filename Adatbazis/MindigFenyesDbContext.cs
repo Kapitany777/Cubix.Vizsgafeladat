@@ -11,9 +11,11 @@ namespace Adatbazis
     public class MindigFenyesDbContext : DbContext
     {
         public MindigFenyesDbContext()
-            : base(new DbContextOptionsBuilder().UseSqlServer(
-            "Server=(localdb)\\mssqllocaldb;Database=MindigFenyesDB;Trusted_Connection=True;"
-            ).Options)
+            : base(new DbContextOptionsBuilder()
+                  .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=MindigFenyesDB;Trusted_Connection=True;")
+                  .UseLazyLoadingProxies()
+                  .Options)
+
         {
         }
 
