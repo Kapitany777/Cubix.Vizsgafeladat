@@ -60,6 +60,7 @@ namespace Adatbazis.KezdetiAdatok
                     Iranyitoszam = "6600",
                     Varos = "Szentes",
                     Cim = "Kossuth u. 40.",
+                    HibaLeiras = "Nem világít a lámpa",
                     BejelentesDatuma = new DateTime(2023, 08, 01)
                 },
 
@@ -68,6 +69,7 @@ namespace Adatbazis.KezdetiAdatok
                     Iranyitoszam = "6600",
                     Varos = "Szentes",
                     Cim = "Nagy Ferenc u. 4.",
+                    HibaLeiras = "Összevissza villog",
                     BejelentesDatuma = new DateTime(2023, 08, 05)
                 },
 
@@ -76,6 +78,7 @@ namespace Adatbazis.KezdetiAdatok
                     Iranyitoszam = "6640",
                     Varos = "Csongrád",
                     Cim = "Petőfi u. 25.",
+                    HibaLeiras = "Sötét van az utcán",
                     BejelentesDatuma = new DateTime(2023, 08, 02)
                 },
 
@@ -84,6 +87,7 @@ namespace Adatbazis.KezdetiAdatok
                     Iranyitoszam = "6635",
                     Varos = "Szegvár",
                     Cim = "Petőfi u. 15.",
+                    HibaLeiras = "Nem világít",
                     BejelentesDatuma = new DateTime(2023, 08, 12)
                 },
 
@@ -92,6 +96,7 @@ namespace Adatbazis.KezdetiAdatok
                     Iranyitoszam = "6630",
                     Varos = "Mindszent",
                     Cim = "Rákóczi u. 10.",
+                    HibaLeiras = "Kidőlt egy oszlop",
                     BejelentesDatuma = new DateTime(2023, 08, 12),
                     JavitasDatuma = new DateTime(2023, 08, 14),
                     Dolgozo = dolgozo1,
