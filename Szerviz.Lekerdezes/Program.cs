@@ -12,20 +12,20 @@ namespace Szerviz.Lekerdezes
             Console.WriteLine("--------------------------------");
             Console.WriteLine();
 
-            Console.WriteLine("A programból a 0 beírásával lehet kilépni.");
+            Console.WriteLine("A programból a -1 érték beírásával lehet kilépni.");
             Console.WriteLine();
         }
 
         static string SzuroFeltetelBekerese()
         {
-            string szoveg = string.Empty;
+            string? valasz = string.Empty;
             int feltetel;
 
             do
             {
                 Console.Write("Kérem a szűrőfeltételt: ");
-                szoveg = Console.ReadLine();
-            } while (!int.TryParse(szoveg, out feltetel));
+                valasz = Console.ReadLine();
+            } while (!int.TryParse(valasz, out feltetel));
 
             return feltetel.ToString();
         }
@@ -37,18 +37,20 @@ namespace Szerviz.Lekerdezes
                 Console.WriteLine("Üres eredményhalmaz!");
                 return;
             }
-            
+
             foreach (var bejelentes in bejelentesek)
             {
                 Console.WriteLine($"{bejelentes.Id} - {bejelentes.Iranyitoszam} {bejelentes.Varos}, {bejelentes.Cim}");
+                Console.WriteLine($"\t{bejelentes.HibaLeiras}");
             }
+
+            Console.WriteLine();
         }
 
         static void Main(string[] args)
         {
             var dbContext = new MindigFenyesDbContext();
-            var database = new LekerdezesAdatbazis(dbContext.Dolgozok, dbContext.JavitasTipusok, dbContext.Bejelentesek);
-            var lekerdezesek = new MindigFenyesLekerdezesek(database);
+            var lekerdezesek = new BejelentesLekerdezesek(dbContext.Bejelentesek);
 
             FejlecKiirasa();
 
@@ -60,26 +62,36 @@ namespace Szerviz.Lekerdezes
                 {
                     szuroFeltetel = SzuroFeltetelBekerese();
 
+                    if (szuroFeltetel == "-1")
+                    {
+                        break;
+                    }
+
+                    IEnumerable<Bejelentes>? eredmeny = null;
+
                     if (szuroFeltetel.Length == 4)
                     {
-                        var eredmeny = lekerdezesek.BejelentesekIranyitoszamAlapjan(szuroFeltetel);
-                        EredmenyKiirasa(eredmeny);
+                        eredmeny = lekerdezesek.BejelentesekIranyitoszamAlapjan(szuroFeltetel);
                     }
                     else if (szuroFeltetel.Length == 3)
                     {
-                        var eredmeny = lekerdezesek.BejelentesekIranyitoszamKezdetAlapjan(szuroFeltetel);
-                        EredmenyKiirasa(eredmeny);
+                        eredmeny = lekerdezesek.BejelentesekIranyitoszamKezdetAlapjan(szuroFeltetel);
                     }
                     else if (szuroFeltetel.Length <= 2)
                     {
+                        eredmeny = lekerdezesek.BejelentesekNapokAlapjan(DateTime.Now, int.Parse(szuroFeltetel));
+                    }
 
+                    if (eredmeny != null)
+                    {
+                        EredmenyKiirasa(eredmeny);
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Hiba történt: {ex.Message}");
                 }
-            } while (szuroFeltetel != "0");
+            } while (true);
         }
     }
 }
