@@ -1,4 +1,5 @@
-﻿using Bejelentes.Web.Models;
+﻿using Adatbazis;
+using Bejelentes.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -21,6 +22,18 @@ namespace Bejelentes.Web.Controllers
         public IActionResult SiteDescription()
         {
             return View();
+        }
+
+        public IActionResult BejelentesRogzitese(Adatbazis.Models.Bejelentes bejelentes)
+        {
+            bejelentes.BejelentesDatuma = DateTime.Today;
+
+            var dbContext = new MindigFenyesDbContext();
+
+            dbContext.Bejelentesek.Add(bejelentes);
+            dbContext.SaveChanges();
+
+            return View(bejelentes);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

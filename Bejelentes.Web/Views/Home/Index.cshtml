@@ -1,8 +1,36 @@
-﻿@{
+﻿@model Adatbazis.Models.Bejelentes
+
+@{
     ViewData["Title"] = "Mindig Fényes Kft. - Hibabejelentés";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="text-center">
-</div>
+@using (Html.BeginForm("BejelentesRogzitese", "Home", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>@Html.Label("Irányítószám: ")</td>
+            <td>@Html.TextBoxFor(m => m.Iranyitoszam)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.Label("Város: ")</td>
+            <td>@Html.TextBoxFor(m => m.Varos)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.Label("Cím: ")</td>
+            <td>@Html.TextBoxFor(m => m.Cim)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.Label("Hiba leírása: ")</td>
+            <td>@Html.TextBoxFor(m => m.HibaLeiras)</td>
+        </tr>
+
+        <tr>
+            <td><input type="submit" /></td>
+        </tr>
+    </table>
+}
