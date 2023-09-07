@@ -1,10 +1,5 @@
 ﻿using Adatbazis.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Adatbazis
 {
@@ -15,7 +10,6 @@ namespace Adatbazis
                   .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=MindigFenyesDB;Trusted_Connection=True;")
                   .UseLazyLoadingProxies()
                   .Options)
-
         {
         }
 
