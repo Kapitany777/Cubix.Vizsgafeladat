@@ -1,24 +1,13 @@
 ﻿using Adatbazis;
 using Adatbazis.Models;
 using Lekerdezesek;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation.Provider;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Serialization;
+using Titkarno.Lekerdezes.Serialization;
+using Titkarno.Lekerdezes.Utils;
 
 namespace Titkarno.Lekerdezes
 {
@@ -45,7 +34,7 @@ namespace Titkarno.Lekerdezes
         {
             if (string.IsNullOrEmpty(TextBoxDolgozoId.Text))
             {
-                MessageBox.Show("A dolgozó kódjának megadása kötelező!");
+                WpfMessageBox.MsgError("A dolgozó kódjának megadása kötelező!");
                 return;
             }
 
@@ -67,7 +56,7 @@ namespace Titkarno.Lekerdezes
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Hiba történt: {ex.Message}");
+                WpfMessageBox.MsgError("Hiba történt:", ex);
             }
         }
 
@@ -86,13 +75,13 @@ namespace Titkarno.Lekerdezes
         {
             if (string.IsNullOrEmpty(TextBoxEv.Text))
             {
-                MessageBox.Show("Az év megadása kötelező!");
+                WpfMessageBox.MsgError("Az év megadása kötelező!");
                 return;
             }
 
             if (string.IsNullOrEmpty(TextBoxHonap.Text))
             {
-                MessageBox.Show("A hónap megadása kötelező!");
+                WpfMessageBox.MsgError("A hónap megadása kötelező!");
                 return;
             }
 
@@ -113,34 +102,206 @@ namespace Titkarno.Lekerdezes
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Hiba történt: {ex.Message}");
+                WpfMessageBox.MsgError("Hiba történt:", ex);
             }
+        }
+
+        private string ExportFileNevBekerese()
+        {
+            var filenev = string.Empty;
+
+            var dialog = new SaveFileDialog();
+
+            dialog.Filter = "JSON file (*.json)|*.json|XML file|*.xml";
+
+            if (dialog.ShowDialog() == true)
+            {
+                filenev = dialog.FileName;
+            }
+
+            return filenev;
+        }
+
+        private EredmenySerializer? GetSerializer(string fileNev)
+        {
+            EredmenySerializer? serializer = null;
+
+            if (System.IO.Path.GetExtension(fileNev) == ".json")
+            {
+                serializer = new EredmenyJsonSerializer(fileNev);
+            }
+            else if (System.IO.Path.GetExtension(fileNev) == ".xml")
+            {
+                serializer = new EredmenyXmlSerializer(fileNev);
+            }
+
+            return serializer;
+        }
+
+        private void Eredmeny1Exportalasa(string fileNev)
+        {
+            EredmenySerializer? serializer = GetSerializer(fileNev);
+
+            if (serializer == null)
+            {
+                throw new Exception("Hibás fájltípus!");
+            }
+
+            var dbContext = new MindigFenyesDbContext();
+
+            var dolgozo = dbContext.Dolgozok.Find(int.Parse(TextBoxDolgozoId.Text));
+
+            if (dolgozo == null)
+            {
+                throw new Exception("Hibás dolgozókód!");
+            }
+
+            var lekerdezesek = new StatisztikaLekerdezesek(dbContext.Bejelentesek);
+
+            var eredmeny = lekerdezesek
+                .BejelentesekDolgozoAlapjan(dolgozo)
+                .Select(b =>
+                    new Eredmeny
+                    {
+                        Id = b.Id,
+                        Iranyitoszam = b.Iranyitoszam,
+                        Varos = b.Varos,
+                        Cim = b.Cim,
+                        HibaLeiras = b.HibaLeiras,
+                        BejelentesDatuma = b.BejelentesDatuma,
+                        JavitasDatuma = b.JavitasDatuma,
+                        DolgozoId = b.DolgozoId,
+                        DolgozoNev = $"{b.Dolgozo?.VezetekNev} {b.Dolgozo?.KeresztNev}",
+                        JavitasTipusId = b.JavitasTipusId,
+                        TipusNev = b.JavitasTipus?.TipusNev
+                    })
+                .ToList();
+
+            serializer.Serialize(eredmeny);
         }
 
         private void ButtonExport1_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: ez még nem működik rendesen
+            if (string.IsNullOrEmpty(TextBoxDolgozoId.Text))
+            {
+                WpfMessageBox.MsgError("A dolgozó kódjának megadása kötelező!");
+                return;
+            }
+
+            string fileNev = ExportFileNevBekerese();
+
+            if (string.IsNullOrEmpty(fileNev))
+            {
+                return;
+            }
+
+            try
+            {
+                Eredmeny1Exportalasa(fileNev);
+
+                WpfMessageBox.MsgInfo("Az exportálás sikeresen befejeződött!");
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.MsgError("Hiba történt!", ex);
+            }
+        }
+
+        private void Eredmeny2Exportalasa(
+            string fileNev,
+            int ev,
+            int honap)
+        {
+            EredmenySerializer? serializer = GetSerializer(fileNev);
+
+            if (serializer == null)
+            {
+                throw new Exception("Hibás fájltípus!");
+            }
+
             var dbContext = new MindigFenyesDbContext();
+
             var lekerdezesek = new StatisztikaLekerdezesek(dbContext.Bejelentesek);
 
-            var eredmeny =
-                lekerdezesek
-                .BejelentesekDolgozoAlapjan(new Dolgozo { Id = 1 })
-                .Select(x => x.Id)
-                .ToList();
-
-            var fileName = @"c:\proba\20230906\result1.xml";
-            var serializer = new XmlSerializer(lekerdezesek.GetType());
-            using (TextWriter stream = new StreamWriter(fileName))
+            if (CheckBoxFeladatTipus.IsChecked == true)
             {
-                serializer.Serialize(stream, eredmeny);
-                stream.Flush();
+                var eredmeny = lekerdezesek
+                    .BejelentesekJavitasTipusSzerint(ev, honap)
+                    .Select(b =>
+                        new Eredmeny
+                        {
+                            Id = b.Id,
+                            Iranyitoszam = b.Iranyitoszam,
+                            Varos = b.Varos,
+                            Cim = b.Cim,
+                            HibaLeiras = b.HibaLeiras,
+                            BejelentesDatuma = b.BejelentesDatuma,
+                            JavitasDatuma = b.JavitasDatuma,
+                            DolgozoId = b.DolgozoId,
+                            DolgozoNev = $"{b.Dolgozo?.VezetekNev} {b.Dolgozo?.KeresztNev}",
+                            JavitasTipusId = b.JavitasTipusId,
+                            TipusNev = b.JavitasTipus?.TipusNev
+                        })
+                    .ToList();
+
+                serializer.Serialize(eredmeny);
+            }
+            else
+            {
+                var eredmeny = lekerdezesek
+                    .BejelentesekEvEsHonapAlapjan(ev, honap)
+                    .Select(b =>
+                        new Eredmeny
+                        {
+                            Id = b.Id,
+                            Iranyitoszam = b.Iranyitoszam,
+                            Varos = b.Varos,
+                            Cim = b.Cim,
+                            HibaLeiras = b.HibaLeiras,
+                            BejelentesDatuma = b.BejelentesDatuma,
+                            JavitasDatuma = b.JavitasDatuma,
+                            DolgozoId = b.DolgozoId,
+                            DolgozoNev = $"{b.Dolgozo?.VezetekNev} {b.Dolgozo?.KeresztNev}",
+                            JavitasTipusId = b.JavitasTipusId,
+                            TipusNev = b.JavitasTipus?.TipusNev
+                        })
+                    .ToList();
+
+                serializer.Serialize(eredmeny);
             }
         }
 
         private void ButtonExport2_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(TextBoxEv.Text))
+            {
+                WpfMessageBox.MsgError("Az év megadása kötelező!");
+                return;
+            }
 
+            if (string.IsNullOrEmpty(TextBoxHonap.Text))
+            {
+                WpfMessageBox.MsgError("A hónap megadása kötelező!");
+                return;
+            }
+
+            string fileNev = ExportFileNevBekerese();
+
+            if (string.IsNullOrEmpty(fileNev))
+            {
+                return;
+            }
+
+            try
+            {
+                Eredmeny2Exportalasa(fileNev, int.Parse(TextBoxEv.Text), int.Parse(TextBoxHonap.Text));
+
+                WpfMessageBox.MsgInfo("Az exportálás sikeresen befejeződött!");
+            }
+            catch (Exception ex)
+            {
+                WpfMessageBox.MsgError("Hiba történt!", ex);
+            }
         }
     }
 }
